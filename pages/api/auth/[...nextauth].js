@@ -13,7 +13,7 @@ const refreshAccessTokenn = async (token) => {
     return {
       ...token,
       accessToken: refreshedToken.access_token,
-      accessTokenExpires: Date.now + refreshedToken.expires_in * 1000,
+      accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000,
       refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
     }
   } catch (error) {
@@ -44,6 +44,9 @@ export default NextAuth({
     async jwt({ token, account, user }) {
       //initial sign in
       if (account && user) {
+        console.log('calleds')
+        console.log('account', account)
+        console.log('user', user)
         return {
           ...token,
           accessToken: account.access_token,
@@ -52,6 +55,8 @@ export default NextAuth({
           accessTokenExpires: account.expires_at * 1000, //convert to ms
         }
       }
+
+      console.log('user ', user)
 
       //return previous token if the access token has not expired yet
       if (Date.now() < token.accessTokenExpires) {
